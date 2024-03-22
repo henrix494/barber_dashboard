@@ -8,14 +8,16 @@ export default {
       async authorize(credentials) {
         const { userName: username, password } = credentials;
         const user = await getUserByUserName(username as string);
-        console.log(user);
-        if (user.password === password) {
-          return user;
+
+        if (user?.password === password) {
+          return {
+            ...user,
+            id: user?.id.toString(), // Convert id to string
+          };
         } else {
           return null;
         }
-        return null;
       },
     }),
   ],
-} satisfies NextAuthConfig;
+} as NextAuthConfig;
