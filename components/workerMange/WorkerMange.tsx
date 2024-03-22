@@ -41,12 +41,16 @@ export default function WorkerMange({ id }: any) {
     6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
   ];
   const workingDays = [1, 2, 3, 4, 5, 6];
-  const timesSelect = times.map((item) => {
-    return <option value={item}>{item}</option>;
-  });
-  const workDays = workingDays.map((item) => {
+  const timesSelect = times.map((item, index) => {
     return (
-      <div className="">
+      <option value={item.toString()} id={index.toString()}>
+        {item}
+      </option>
+    );
+  });
+  const workDays = workingDays.map((item, index) => {
+    return (
+      <div id={index.toString()} className="">
         <h3>{item}</h3>
         <input
           checked={checkedStates[item]}
@@ -128,7 +132,10 @@ export default function WorkerMange({ id }: any) {
 
   const names = user?.barber_workers.map((item: any) => {
     return (
-      <div className=" bg-white text-black flex justify-around flex-col overflow-hidden ">
+      <div
+        id={item.toString()}
+        className=" bg-white text-black flex justify-around flex-col overflow-hidden "
+      >
         <div className="flex justify-around ">
           <h3 className={` cursor-pointer " border-b-2"}`}>{item.name}</h3>
 

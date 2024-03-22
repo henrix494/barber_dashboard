@@ -66,7 +66,10 @@ export default function ServiceManage({ adminId }: ServiceManageProps) {
       <div className="flex gap-10 flex-col ">
         {user?.barber_workers.map((worker: Worker) => {
           return (
-            <div className=" bg-blue-600 text-white px-4 py-1 rounded-lg lg:text-2xl overflow-hidden ">
+            <div
+              key={worker.id}
+              className=" bg-blue-600 text-white px-4 py-1 rounded-lg lg:text-2xl overflow-hidden "
+            >
               <div className=" flex justify-around w-full">
                 <h4>{worker.name}</h4>
                 <button onClick={() => openHandler(worker.id)}>

@@ -30,6 +30,7 @@ export default function Barbers({ id }: any) {
   const names = count?.barber_workers.map((item: any) => {
     return (
       <h3
+        key={item.id}
         className={` cursor-pointer ${item.id == barberId && " border-b-2"}`}
         onClick={() => handleCalendar(item.id)}
       >
