@@ -1,0 +1,89 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Barber_users {
+  id                 Int        @id @default(autoincrement())
+  username           String
+  name               String
+  password           String
+  email              String
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime      @updatedAt
+  barber_customers   Barber_customers[]
+  barber_workers     Barber_workers[]
+  barber_appointments Barber_appointments[]
+  barber_services    service[]
+}
+
+
+model Barber_customers{
+  id Int @id @default(autoincrement())
+  name String
+  lastname String
+  createdAt DateTime @default(now())
+  barber_users_belongs   Barber_users @relation(fields: [barber_users_belongsID], references: [id])
+  barber_appointments   Barber_appointments[]
+  barber_users_belongsID   Int
+  sex String
+  role String
+  birthdate DateTime?
+  email  String?
+  phone String
+  }
+model Barber_workers{
+  id Int @id @default(autoincrement())
+  name String
+  lastname String
+  barber_workers_belongs   Barber_users @relation(fields: [barber_workers_belongsID], references: [id])
+  barber_appointments   Barber_appointments[]
+  availability Availability[]
+  services service[]
+  barber_workers_belongsID   Int
+  role String
+
+}
+model service{
+  id Int @id @default(autoincrement())
+  name String
+  price Int
+  barber_services_belongs   Barber_users @relation(fields: [barber_services_belongsID], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  barber_workers_belongsService   Barber_workers @relation(fields: [barber_workers_belongsServiceId], references: [id])
+  barber_workers_belongsServiceId   Int
+  barber_services_belongsID   Int
+  appointments Barber_appointments[]
+}
+
+model Barber_appointments{
+  id Int @id @default(autoincrement())
+  appointment_belongs_to_barber Barber_workers @relation(fields: [appointment_belongs_to_barberID], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  appointment_belongs_to_customer Barber_customers @relation(fields: [appointment_belongs_to_customerID], references: [id])
+  appointment_belongs_to_user Barber_users @relation(fields: [appointment_belongs_to_userID], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  appointment_belongs_to_userID Int
+  appointment_belongs_to_customerID Int
+  appointment_belongs_to_barberID Int
+  status String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  apoointment_date DateTime
+  service service @relation(fields: [serviceId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  serviceId Int
+}
+model Availability {
+  id         Int           @id @default(autoincrement())
+  barber     Barber_workers @relation(fields: [barberId], references: [id])
+  barberId   Int
+  day        String
+  timeSlot   DateTime
+  duration   Int
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+}
